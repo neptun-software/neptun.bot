@@ -1,5 +1,5 @@
-from project_name.base import NAME
+from tech_stack_ai_configuration_data_scraper.base import NAME
 
 
 def test_base():
-    assert NAME == "project_name"
+    assert NAME == "tech_stack_ai_configuration_data_scraper"

@@ -16,10 +16,10 @@ echo "Description: $description";
 
 echo "Renaming project..."
 
-original_author="author_name"
-original_name="project_name"
-original_urlname="project_urlname"
-original_description="project_description"
+original_author="jonasfroeller"
+original_name="tech_stack_ai_configuration_data_scraper"
+original_urlname="tech-stack-ai-configuration-data-scraper"
+original_description="Awesome tech_stack_ai_configuration_data_scraper created by jonasfroeller"
 # for filename in $(find . -name "*.*") 
 for filename in $(git ls-files) 
 do
@@ -30,7 +30,7 @@ do
     echo "Renamed $filename"
 done
 
-mv project_name $name
+mv tech_stack_ai_configuration_data_scraper $name
 
 # This command runs only once on GHA!
 rm -rf .github/template.yml
