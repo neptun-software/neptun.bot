@@ -1,6 +1,6 @@
 # How to develop on this project
 
-tech_stack_ai_configuration_data_scraper welcomes contributions from the community.
+neptun_webscraper welcomes contributions from the community.
 
 **You need PYTHON3!**
 

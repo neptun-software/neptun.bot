@@ -1,4 +1,4 @@
-"""CLI interface for tech_stack_ai_configuration_data_scraper project.
+"""CLI interface for neptun_webscraper project.
 
 Be creative! do whatever you want!
 
@@ -12,7 +12,7 @@ Be creative! do whatever you want!
 def main():  # pragma: no cover
     """
     The main function executes on commands:
-    `python -m tech_stack_ai_configuration_data_scraper` and `$ tech_stack_ai_configuration_data_scraper `.
+    `python -m neptun_webscraper` and `$ neptun_webscraper `.
 
     This is your program's entry point.
 

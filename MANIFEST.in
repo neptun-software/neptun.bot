@@ -2,4 +2,4 @@ include LICENSE
 include HISTORY.md
 include Containerfile
 graft tests
-graft tech_stack_ai_configuration_data_scraper
+graft neptun_webscraper

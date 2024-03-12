@@ -40,7 +40,7 @@ See also
 - ✅ Code linting using [flake8](https://flake8.pycqa.org/en/latest/)
 - 📊 Code coverage reports using [codecov](https://about.codecov.io/sign-up/)
 - 🛳️ Automatic release to [PyPI](https://pypi.org) using [twine](https://twine.readthedocs.io/en/latest/) and github actions.
-- 🎯 Entry points to execute your program using `python -m <tech_stack_ai_configuration_data_scraper>` or `$ tech_stack_ai_configuration_data_scraper` with basic CLI argument parsing.
+- 🎯 Entry points to execute your program using `python -m <neptun_webscraper>` or `$ neptun_webscraper` with basic CLI argument parsing.
 - 🔄 Continuous integration using [Github Actions](.github/workflows/) with jobs to lint, test and release your project on Linux, Mac and Windows environments.
 
 > Curious about architectural decisions on this template? read [ABOUT_THIS_TEMPLATE.md](ABOUT_THIS_TEMPLATE.md)  
@@ -51,33 +51,33 @@ See also
 <!--  DELETE THE LINES ABOVE THIS AND WRITE YOUR PROJECT README BELOW -->
 
 ---
-# tech_stack_ai_configuration_data_scraper
+# neptun_webscraper
 
 [![codecov](https://codecov.io/gh/jonasfroeller/tech-stack-ai-configuration-data-scraper/branch/main/graph/badge.svg?token=tech-stack-ai-configuration-data-scraper_token_here)](https://codecov.io/gh/jonasfroeller/tech-stack-ai-configuration-data-scraper)
 [![CI](https://github.com/jonasfroeller/tech-stack-ai-configuration-data-scraper/actions/workflows/main.yml/badge.svg)](https://github.com/jonasfroeller/tech-stack-ai-configuration-data-scraper/actions/workflows/main.yml)
 
-Awesome tech_stack_ai_configuration_data_scraper created by jonasfroeller
+Awesome neptun_webscraper created by jonasfroeller
 
 ## Install it from PyPI
 
 ```bash
-pip install tech_stack_ai_configuration_data_scraper
+pip install neptun_webscraper
 ```
 
 ## Usage
 
 ```py
-from tech_stack_ai_configuration_data_scraper import BaseClass
-from tech_stack_ai_configuration_data_scraper import base_function
+from neptun_webscraper import BaseClass
+from neptun_webscraper import base_function
 
 BaseClass().base_method()
 base_function()
 ```
 
 ```bash
-$ python -m tech_stack_ai_configuration_data_scraper
+$ python -m neptun_webscraper
 #or
-$ tech_stack_ai_configuration_data_scraper
+$ neptun_webscraper
 ```
 
 ## Development

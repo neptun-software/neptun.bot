@@ -1,5 +1,5 @@
-from tech_stack_ai_configuration_data_scraper.base import NAME
+from neptun_webscraper.base import NAME
 
 
 def test_base():
-    assert NAME == "tech_stack_ai_configuration_data_scraper"
+    assert NAME == "neptun_webscraper"
