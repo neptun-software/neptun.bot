@@ -1,16 +1,43 @@
 import scrapy
+from scrapy_splash import SplashRequest
 
+# Splash (needed for JS support, if websites load content dynamically lazy) Settings
 
+SPLASH_SETTINGS = {
+    'SPLASH_URL': 'http://localhost:8050',
+
+    'DOWNLOADER_MIDDLEWARES': {
+        'scrapy_splash.SplashCookiesMiddleware': 723,
+        'scrapy_splash.SplashMiddleware': 725,
+        'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+    },
+
+    'SPIDER_MIDDLEWARES': {
+        'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+    },
+
+    'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
+    'HTTPCACHE_STORAGE': 'scrapy_splash.SplashAwareFSCacheStorage'
+}
+
+# docker run -p 8050:8050 scrapinghub/splash
 class DockerhubDockerRegistrySpider(scrapy.Spider):
     name = "dockerhubDockerRegistrySpider"
-    
+    custom_settings = SPLASH_SETTINGS
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield SplashRequest(url, self.parse, args={'wait': 2, 'images': 0}) # (0 to 30 seconds)
+
     def parse(self, response):
-        print("response", response)
+        print("response", response.text)
         search_results = response.css('#searchResults')
 
         if search_results:
             for result in search_results.xpath('./div'):
                 yield self.parse_result(result)
+        else:
+            print("No search results found")
 
     def parse_result(self, result):
         # extracts name, description, uploader, chips, downloads, stars, last update, pulls last week
