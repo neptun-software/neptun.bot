@@ -8,6 +8,10 @@ Be creative! do whatever you want!
 - Import things from your .base module
 """
 
+import argparse
+from scrapy.crawler import CrawlerProcess
+from neptun_webscraper.spiders.dockerhub import DockerhubDockerRegistrySpider
+from neptun_webscraper.spiders.quay import QuayDockerRegistrySpider
 
 def main():  # pragma: no cover
     """
@@ -24,5 +28,33 @@ def main():  # pragma: no cover
         * Run a command line application (Click, Typer, ArgParse)
         * List all available tasks
         * Run an application (Flask, FastAPI, Django, etc.)
+
+    ---
+
+    Choose between different spiders.  
+    Examples:
+    ```
+    python -m neptun_webscraper dockerhub --query=python
+    ```
+
+    ```
+    python -m neptun_webscraper quay --query=python
+    ```
     """
-    print("This will do something")
+
+    parser = argparse.ArgumentParser(description="Neptune WebScraper CLI")
+    parser.add_argument("spider", choices=["dockerhub", "quay"], help="Choose the spider to run")
+    parser.add_argument("--query", default="", help="Search query for the registry")
+    args = parser.parse_args()
+
+    process = CrawlerProcess()
+
+    if args.spider == "dockerhub":
+        spider = DockerhubDockerRegistrySpider
+        start_url = f"https://hub.docker.com/search?q={args.query}"
+    elif args.spider == "quay":
+        spider = QuayDockerRegistrySpider
+        start_url = f"https://quay.io/search?q={args.query}"
+
+    process.crawl(spider, start_urls=[start_url])
+    process.start()
