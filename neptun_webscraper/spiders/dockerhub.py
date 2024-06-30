@@ -18,7 +18,9 @@ SPLASH_SETTINGS = {
     },
 
     'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
-    'HTTPCACHE_STORAGE': 'scrapy_splash.SplashAwareFSCacheStorage'
+    'HTTPCACHE_STORAGE': 'scrapy_splash.SplashAwareFSCacheStorage',
+    
+    'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
 }
 
 # HTML response with cookies, headers, body and method
@@ -56,7 +58,7 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
                 endpoint='execute',
                 cache_args=['lua_source'],
                 args={
-                    'wait': 5,
+                    'wait': 15,
                     'images': 0,
                     'lua_source': splash_script
                 },
