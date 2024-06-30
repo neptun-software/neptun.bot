@@ -5,4 +5,4 @@
 # You can also run `make switch-to-poetry` to use the poetry package manager.
 
 Scrapy==2.11.1
-scrapy-splash==0.9.0
+scrapy-playwright==v0.0.36

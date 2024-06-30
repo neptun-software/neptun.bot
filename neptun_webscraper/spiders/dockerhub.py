@@ -1,78 +1,31 @@
 import scrapy
-from scrapy_splash import SplashRequest
 from scrapy.selector import Selector
 
 # Splash (needed for JS support, if websites load content dynamically lazy) Settings
 
-SPLASH_SETTINGS = {
-    'SPLASH_URL': 'http://localhost:8050',
-
-    'DOWNLOADER_MIDDLEWARES': {
-        'scrapy_splash.SplashCookiesMiddleware': 723,
-        'scrapy_splash.SplashMiddleware': 725,
-        'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+SCRAPY_SETTINGS = {
+    'DOWNLOAD_HANDLERS': {
+        "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+        "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
     },
-
-    'SPIDER_MIDDLEWARES': {
-        'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-    },
-
-    'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
-    'HTTPCACHE_STORAGE': 'scrapy_splash.SplashAwareFSCacheStorage',
     
-    'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7'
+    'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7',
+    'PLAYWRIGHT_BROWSER_TYPE': 'chromium'
 }
 
-# HTML response with cookies, headers, body and method
-splash_script = """
-function main(splash)
-  splash:init_cookies(splash.args.cookies)
-  assert(splash:go{
-    splash.args.url,
-    headers=splash.args.headers,
-    http_method=splash.args.http_method,
-    body=splash.args.body,
-    })
-  assert(splash:wait(0.5))
-
-  local entries = splash:history()
-  local last_response = entries[#entries].response
-  return {
-    url = splash:url(),
-    headers = last_response.headers,
-    http_status = last_response.status,
-    cookies = splash:get_cookies(),
-    html = splash:html(),
-  }
-end
-"""
-
-# docker run -p 8050:8050 scrapinghub/splash --disable-private-mode
+# npm i playwright@1.44.1 --global, playwright install
 class DockerhubDockerRegistrySpider(scrapy.Spider):
     name = "dockerhubDockerRegistrySpider"
-    custom_settings = SPLASH_SETTINGS
+    custom_settings = SCRAPY_SETTINGS
 
     def start_requests(self):
         for url in self.start_urls:
-            yield SplashRequest(url, self.parse,
-                endpoint='execute',
-                cache_args=['lua_source'],
-                args={
-                    'wait': 15,
-                    'images': 0,
-                    'lua_source': splash_script
-                },
-                headers={
-                    'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36',
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                    'Referer': 'https://duckduckgo.com/',
-                    'Connection': 'keep-alive'
-                }) # (0 to 30 seconds)
+            yield scrapy.Request(url, meta={"playwright": True})
 
     def parse(self, response):
-        responseHTML = response.data['html']
+        responseHTML = response.text
         selector = Selector(text=responseHTML)
-        print("response", responseHTML) # response.text is raw, response.body is splash html
+        print("response", responseHTML)
         search_results = selector.css('#searchResults')
 
         if search_results:
