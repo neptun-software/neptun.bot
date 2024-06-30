@@ -1,5 +1,6 @@
 import scrapy
 from scrapy_splash import SplashRequest
+from scrapy.selector import Selector
 
 # Splash (needed for JS support, if websites load content dynamically lazy) Settings
 
@@ -20,24 +21,63 @@ SPLASH_SETTINGS = {
     'HTTPCACHE_STORAGE': 'scrapy_splash.SplashAwareFSCacheStorage'
 }
 
-# docker run -p 8050:8050 scrapinghub/splash
+# HTML response with cookies, headers, body and method
+splash_script = """
+function main(splash)
+  splash:init_cookies(splash.args.cookies)
+  assert(splash:go{
+    splash.args.url,
+    headers=splash.args.headers,
+    http_method=splash.args.http_method,
+    body=splash.args.body,
+    })
+  assert(splash:wait(0.5))
+
+  local entries = splash:history()
+  local last_response = entries[#entries].response
+  return {
+    url = splash:url(),
+    headers = last_response.headers,
+    http_status = last_response.status,
+    cookies = splash:get_cookies(),
+    html = splash:html(),
+  }
+end
+"""
+
+# docker run -p 8050:8050 scrapinghub/splash --disable-private-mode
 class DockerhubDockerRegistrySpider(scrapy.Spider):
     name = "dockerhubDockerRegistrySpider"
     custom_settings = SPLASH_SETTINGS
 
     def start_requests(self):
         for url in self.start_urls:
-            yield SplashRequest(url, self.parse, args={'wait': 2, 'images': 0}) # (0 to 30 seconds)
+            yield SplashRequest(url, self.parse,
+                endpoint='execute',
+                cache_args=['lua_source'],
+                args={
+                    'wait': 5,
+                    'images': 0,
+                    'lua_source': splash_script
+                },
+                headers={
+                    'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                    'Referer': 'https://duckduckgo.com/',
+                    'Connection': 'keep-alive'
+                }) # (0 to 30 seconds)
 
     def parse(self, response):
-        print("response", response.text)
-        search_results = response.css('#searchResults')
+        responseHTML = response.data['html']
+        selector = Selector(text=responseHTML)
+        print("response", responseHTML) # response.text is raw, response.body is splash html
+        search_results = selector.css('#searchResults')
 
         if search_results:
             for result in search_results.xpath('./div'):
                 yield self.parse_result(result)
         else:
-            print("No search results found")
+            print("No search results found...")
 
     def parse_result(self, result):
         # extracts name, description, uploader, chips, downloads, stars, last update, pulls last week
