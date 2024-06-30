@@ -1,5 +1,8 @@
 import scrapy
 from scrapy.selector import Selector
+from scrapy_playwright.page import PageMethod
+from datetime import datetime
+import json
 
 # Splash (needed for JS support, if websites load content dynamically lazy) Settings
 
@@ -10,7 +13,8 @@ SCRAPY_SETTINGS = {
     },
     
     'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7',
-    'PLAYWRIGHT_BROWSER_TYPE': 'chromium'
+    'PLAYWRIGHT_BROWSER_TYPE': 'chromium',
+    'USER_AGENT': None # using browser user agent instead
 }
 
 # npm i playwright@1.44.1 --global, playwright install
@@ -20,17 +24,34 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
 
     def start_requests(self):
         for url in self.start_urls:
-            yield scrapy.Request(url, meta={"playwright": True})
+            yield scrapy.Request(url, meta=dict(
+                playwright=True,
+                playwright_include_page=True,
+                playwright_page_methods=[
+                    PageMethod("wait_for_selector", "div#searchResults"),
+                    PageMethod("screenshot", path="./neptun_webscraper/spiders/logs/screenshots/screenshot.png", full_page=True)
+                ]
+            ))
 
     def parse(self, response):
         responseHTML = response.text
         selector = Selector(text=responseHTML)
-        print("response", responseHTML)
         search_results = selector.css('#searchResults')
+        print(search_results)
 
         if search_results:
             for result in search_results.xpath('./div'):
-                yield self.parse_result(result)
+                item = self.parse_result(result)
+                
+                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+                filename = f'./neptun_webscraper/spiders/logs/{timestamp}.json'
+                
+                with open(filename, 'w') as file:
+                    json.dump(item, file, indent=4)
+                
+                print(f"Item has been written to {filename}")
+
+                yield item
         else:
             print("No search results found...")
 
