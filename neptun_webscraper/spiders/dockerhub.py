@@ -49,6 +49,7 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
             search_result_items = search_result.xpath('//a[@data-testid="imageSearchResult"]')
 
             for result in search_result_items:
+                # print("current result html: ", result.extract())
                 item = self.parse_result(result)
                 
                 timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -100,14 +101,14 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
         update_elem = result.css('span:contains("Updated")::text').get()
         if update_elem:
             item['last_update'] = update_elem.strip()
-            desc_elem = result.xpath('following-sibling::p/text()').get()
+            desc_elem = result.xpath('.//span[contains(text(), "Updated")]/ancestor::div[1]/following-sibling::p[1]/text()').get()
             item['description'] = desc_elem.strip() if desc_elem else None
         else:
             item['last_update'] = None
             item['description'] = None
 
         # Extract chips (categories)
-        chips = result.css('[data-testid="productChip"]::text').getall()
+        chips = result.css('[data-testid="productChip"] span::text').getall()
         item['chips'] = chips
 
         # Extract downloads (total pulls)
@@ -117,11 +118,11 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
             item['downloads'] = downloads.strip() if downloads else None
 
         # Extract pulls last week
-        pulls_elem = result.css('span:contains("Pulls:")').xpath('following-sibling::p/text()').get()
+        pulls_elem = result.css('p:contains("Pulls:")').xpath('following-sibling::p/text()').get()
         item['pulls_last_week'] = pulls_elem.replace(',', '') if pulls_elem else None
 
         # Extract stars
-        stars_elem = result.css('[data-testid="StarOutlineIcon"] + span::text').get()
+        stars_elem = result.xpath('//svg[@data-testid="StarOutlineIcon"]/following-sibling::span/strong/text()').get()
         item['stars'] = stars_elem.strip() if stars_elem else None
 
         return item

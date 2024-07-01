@@ -1,0 +1,374 @@
+[
+{
+    "name": "python",
+    "is_official_image": true,
+    "is_verified_publisher": false,
+    "last_update": "Updated 4 days ago",
+    "description": "Python is an interpreted, interactive, object-oriented, open-source programming language.",
+    "chips": [
+        "Languages & Frameworks"
+    ],
+    "downloads": "1B+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "pypy",
+    "is_official_image": true,
+    "is_verified_publisher": false,
+    "last_update": "Updated 10 days ago",
+    "description": "PyPy is a fast, compliant alternative implementation of the Python language.",
+    "chips": [
+        "Languages & Frameworks"
+    ],
+    "downloads": "10M+",
+    "pulls_last_week": null,
+    "stars": "390"
+}
+,
+{
+    "name": "hylang",
+    "is_official_image": true,
+    "is_verified_publisher": false,
+    "last_update": "Updated 4 days ago",
+    "description": "Hy is a Lisp dialect that translates expressions into Python's abstract syntax tree.",
+    "chips": [
+        "Languages & Frameworks"
+    ],
+    "downloads": "10M+",
+    "pulls_last_week": null,
+    "stars": "60"
+}
+,
+{
+    "name": "circleci/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 3 years ago",
+    "description": "Python is an interpreted, interactive, object-oriented, open-source programming language.",
+    "chips": [],
+    "downloads": "100M+",
+    "pulls_last_week": null,
+    "stars": "90"
+}
+,
+{
+    "name": "cimg/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 3 months ago",
+    "description": null,
+    "chips": [
+        "Languages & Frameworks",
+        "Integration & Delivery",
+        "Security"
+    ],
+    "downloads": "100M+",
+    "pulls_last_week": null,
+    "stars": "18"
+}
+,
+{
+    "name": "bitnami/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 days ago",
+    "description": "Bitnami container image for Python",
+    "chips": [],
+    "downloads": "1M+",
+    "pulls_last_week": null,
+    "stars": "27"
+}
+,
+{
+    "name": "amazon/aws-lambda-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 4 days ago",
+    "description": "AWS Lambda base images for Python",
+    "chips": [
+        "Languages & Frameworks",
+        "Integration & Delivery",
+        "Machine Learning & AI"
+    ],
+    "downloads": "1M+",
+    "pulls_last_week": null,
+    "stars": "93"
+}
+,
+{
+    "name": "okteto/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 months ago",
+    "description": null,
+    "chips": [
+        "Languages & Frameworks",
+        "Integration & Delivery"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "google/guestbook-python-redis",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 9 years ago",
+    "description": "A simple guestbook example written in Python.  It works against a redis backend.",
+    "chips": [
+        "Databases & Storage",
+        "Languages & Frameworks",
+        "Integration & Delivery"
+    ],
+    "downloads": "1M+",
+    "pulls_last_week": null,
+    "stars": "5"
+}
+,
+{
+    "name": "ubuntu/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 13 days ago",
+    "description": "A chiselled Ubuntu rock with the Python runtime",
+    "chips": [
+        "Languages & Frameworks"
+    ],
+    "downloads": "10K+",
+    "pulls_last_week": null,
+    "stars": "6"
+}
+,
+{
+    "name": "intel/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 months ago",
+    "description": null,
+    "chips": [],
+    "downloads": "10K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "balenalib/artik533s-alpine-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 years ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Operating Systems"
+    ],
+    "downloads": "500K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "jetbrains/qodana-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated a month ago",
+    "description": "Qodana for Python projects",
+    "chips": [
+        "Languages & Frameworks",
+        "Integration & Delivery",
+        "Security"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "chainguard/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 days ago",
+    "description": "Minimal Python image based on Wolfi.",
+    "chips": [],
+    "downloads": "10K+",
+    "pulls_last_week": null,
+    "stars": "2"
+}
+,
+{
+    "name": "balenalib/fincm3-alpine-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated a year ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Operating Systems"
+    ],
+    "downloads": "500K+",
+    "pulls_last_week": null,
+    "stars": "1"
+}
+,
+{
+    "name": "balenalib/amd64-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 months ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Machine Learning & AI"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "balenalib/amd64-alpine-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 months ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Operating Systems"
+    ],
+    "downloads": "500K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "amazon/aws-sam-cli-build-image-python3.8",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 10 months ago",
+    "description": null,
+    "chips": [
+        "Languages & Frameworks",
+        "Integration & Delivery"
+    ],
+    "downloads": "1M+",
+    "pulls_last_week": null,
+    "stars": "11"
+}
+,
+{
+    "name": "balenalib/artik5-alpine-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 years ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Operating Systems"
+    ],
+    "downloads": "500K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "balenalib/armv7hf-alpine-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 months ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Operating Systems"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "1"
+}
+,
+{
+    "name": "balenalib/amd64-ubuntu-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 months ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Data Science",
+        "Languages & Frameworks",
+        "Operating Systems"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "balenalib/artik10-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 years ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "balenalib/apalis-imx6q-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 years ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Operating Systems"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "0"
+}
+,
+{
+    "name": "balenalib/aarch64-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 months ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Machine Learning & AI"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "1"
+}
+,
+{
+    "name": "balenalib/raspberry-pi-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "Updated 2 months ago",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Operating Systems"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "11"
+}
+]
