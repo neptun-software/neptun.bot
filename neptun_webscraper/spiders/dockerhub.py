@@ -24,12 +24,15 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
 
     def start_requests(self):
         for url in self.start_urls:
+            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+
             yield scrapy.Request(url, meta=dict(
                 playwright=True,
                 playwright_include_page=True,
                 playwright_page_methods=[
                     PageMethod("wait_for_selector", "div#searchResults"),
-                    PageMethod("screenshot", path="./neptun_webscraper/spiders/logs/screenshots/screenshot.png", full_page=True)
+                    PageMethod("click", selector="button#onetrust-reject-all-handler", ),
+                    PageMethod("screenshot", path=f"./neptun_webscraper/spiders/logs/screenshots/{timestamp}.png", full_page=True)
                 ]
             ))
 
