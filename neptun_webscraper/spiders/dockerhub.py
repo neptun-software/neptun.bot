@@ -3,8 +3,10 @@ from scrapy.selector import Selector
 from scrapy_playwright.page import PageMethod
 from datetime import datetime
 import json
+import os
 
-# Splash (needed for JS support, if websites load content dynamically lazy) Settings
+# playwright (needed for JS support, if websites load content dynamically lazy) Settings
+# npm i playwright@1.44.1 --global, playwright install
 
 SCRAPY_SETTINGS = {
     'DOWNLOAD_HANDLERS': {
@@ -17,7 +19,6 @@ SCRAPY_SETTINGS = {
     'USER_AGENT': None # using browser user agent instead
 }
 
-# npm i playwright@1.44.1 --global, playwright install
 class DockerhubDockerRegistrySpider(scrapy.Spider):
     name = "dockerhubDockerRegistrySpider"
     custom_settings = SCRAPY_SETTINGS
@@ -39,24 +40,42 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
     def parse(self, response):
         responseHTML = response.text
         selector = Selector(text=responseHTML)
-        search_results = selector.css('#searchResults')
-        print(search_results)
+        search_result = selector.css('#searchResults')
+        print("---")
+        print("#search_results", search_result)
+        print("---")
 
-        if search_results:
-            for result in search_results.xpath('./div'):
+        if search_result:
+            search_result_items = search_result.xpath('//a[@data-testid="imageSearchResult"]')
+
+            for result in search_result_items:
                 item = self.parse_result(result)
                 
                 timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
                 filename = f'./neptun_webscraper/spiders/logs/{timestamp}.json'
                 
-                with open(filename, 'w') as file:
+                with open(filename, 'a+') as file:
+                    # Move to the end of file
+                    file.seek(0, os.SEEK_END)
+
+                    # If file is not empty, add a comma
+                    if file.tell() > 0:
+                        file.seek(file.tell() - 1, os.SEEK_SET)
+                        file.truncate()
+                        file.write(',\n')
+                    else:
+                        file.write('[\n')
+                    
                     json.dump(item, file, indent=4)
+                    file.write('\n]')
                 
                 print(f"Item has been written to {filename}")
 
                 yield item
         else:
+            print("---")
             print("No search results found...")
+            print("---")
 
     def parse_result(self, result):
         # extracts name, description, uploader, chips, downloads, stars, last update, pulls last week
