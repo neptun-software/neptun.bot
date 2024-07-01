@@ -4,6 +4,9 @@ from scrapy_playwright.page import PageMethod
 from datetime import datetime
 import json
 import os
+import re
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 # playwright (needed for JS support, if websites load content dynamically lazy) Settings
 # npm i playwright@1.44.1 --global, playwright install
@@ -18,6 +21,34 @@ SCRAPY_SETTINGS = {
     'PLAYWRIGHT_BROWSER_TYPE': 'chromium',
     'USER_AGENT': None # using browser user agent instead
 }
+
+def parse_update_string(update_string):
+    print(f"Parsing update string: '{update_string}'")
+    match = re.search(r'Updated (a|\d+) (day|week|month|year)s? ago', update_string)
+    if not match:
+        print(f"String format not recognized: '{update_string}'")
+        raise ValueError("String format not recognized")
+
+    value_str, unit = match.group(1), match.group(2)
+    print(f"Extracted value: {value_str}, unit: {unit}")
+
+    # Handle the case where 'a' is used instead of a number
+    value = 1 if value_str == 'a' else int(value_str)
+    
+    current_date = datetime.now()
+
+    if unit == "day":
+        past_date = current_date - timedelta(days=value)
+    elif unit == "week":
+        past_date = current_date - timedelta(weeks=value)
+    elif unit == "month":
+        past_date = current_date - relativedelta(months=value)
+    elif unit == "year":
+        past_date = current_date - relativedelta(years=value)
+
+    formatted_date = past_date.strftime('%Y-%m-%d')
+    print(f"Calculated past date: {formatted_date}")  # Debugging statement
+    return formatted_date
 
 class DockerhubDockerRegistrySpider(scrapy.Spider):
     name = "dockerhubDockerRegistrySpider"
@@ -100,7 +131,7 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
         # Extract last update and description
         update_elem = result.css('span:contains("Updated")::text').get()
         if update_elem:
-            item['last_update'] = update_elem.strip()
+            item['last_update'] = parse_update_string(update_elem.strip())
             desc_elem = result.xpath('.//span[contains(text(), "Updated")]/ancestor::div[1]/following-sibling::p[1]/text()').get()
             item['description'] = desc_elem.strip() if desc_elem else None
         else:

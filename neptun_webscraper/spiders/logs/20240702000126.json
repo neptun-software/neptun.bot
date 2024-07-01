@@ -1,0 +1,160 @@
+[
+{
+    "name": "python",
+    "is_official_image": true,
+    "is_verified_publisher": false,
+    "last_update": "2024-06-28",
+    "description": "Python is an interpreted, interactive, object-oriented, open-source programming language.",
+    "chips": [
+        "Languages & Frameworks"
+    ],
+    "downloads": "1B+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "pypy",
+    "is_official_image": true,
+    "is_verified_publisher": false,
+    "last_update": "2024-06-22",
+    "description": "PyPy is a fast, compliant alternative implementation of the Python language.",
+    "chips": [
+        "Languages & Frameworks"
+    ],
+    "downloads": "10M+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "hylang",
+    "is_official_image": true,
+    "is_verified_publisher": false,
+    "last_update": "2024-06-28",
+    "description": "Hy is a Lisp dialect that translates expressions into Python's abstract syntax tree.",
+    "chips": [
+        "Languages & Frameworks"
+    ],
+    "downloads": "10M+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "circleci/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "2021-07-02",
+    "description": "Python is an interpreted, interactive, object-oriented, open-source programming language.",
+    "chips": [],
+    "downloads": "100M+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "cimg/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "2024-04-02",
+    "description": null,
+    "chips": [
+        "Languages & Frameworks",
+        "Integration & Delivery",
+        "Security"
+    ],
+    "downloads": "100M+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "bitnami/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "2024-06-30",
+    "description": "Bitnami container image for Python",
+    "chips": [],
+    "downloads": "1M+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "amazon/aws-lambda-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "2024-06-28",
+    "description": "AWS Lambda base images for Python",
+    "chips": [
+        "Languages & Frameworks",
+        "Integration & Delivery",
+        "Machine Learning & AI"
+    ],
+    "downloads": "1M+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "okteto/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "2024-05-02",
+    "description": null,
+    "chips": [
+        "Languages & Frameworks",
+        "Integration & Delivery"
+    ],
+    "downloads": "100K+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "google/guestbook-python-redis",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "2015-07-02",
+    "description": "A simple guestbook example written in Python.  It works against a redis backend.",
+    "chips": [
+        "Databases & Storage",
+        "Languages & Frameworks",
+        "Integration & Delivery"
+    ],
+    "downloads": "1M+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "ubuntu/python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "2024-06-19",
+    "description": "A chiselled Ubuntu rock with the Python runtime",
+    "chips": [
+        "Languages & Frameworks"
+    ],
+    "downloads": "10K+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+,
+{
+    "name": "balenalib/artik533s-alpine-python",
+    "is_official_image": false,
+    "is_verified_publisher": true,
+    "last_update": "2022-07-02",
+    "description": "This image is part of the balena.io base image series for IoT devices.",
+    "chips": [
+        "Languages & Frameworks",
+        "Internet of Things",
+        "Operating Systems"
+    ],
+    "downloads": "500K+",
+    "pulls_last_week": null,
+    "stars": "9.7K"
+}
+]
