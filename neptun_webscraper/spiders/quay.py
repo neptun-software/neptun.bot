@@ -3,7 +3,7 @@ import scrapy
 
 class QuayDockerRegistrySpider(scrapy.Spider):
     name = "quayDockerRegistry"
-    
+
     def parse(self, response):
         item = {}
 

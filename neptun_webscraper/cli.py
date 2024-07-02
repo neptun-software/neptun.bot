@@ -9,9 +9,12 @@ Be creative! do whatever you want!
 """
 
 import argparse
+
 from scrapy.crawler import CrawlerProcess
+
 from neptun_webscraper.spiders.dockerhub import DockerhubDockerRegistrySpider
 from neptun_webscraper.spiders.quay import QuayDockerRegistrySpider
+
 
 def main():  # pragma: no cover
     """
@@ -31,7 +34,7 @@ def main():  # pragma: no cover
 
     ---
 
-    Choose between different spiders.  
+    Choose between different spiders.
     Examples:
     ```
     python -m neptun_webscraper dockerhub --query=python
@@ -43,15 +46,24 @@ def main():  # pragma: no cover
     """
 
     parser = argparse.ArgumentParser(description="Neptune WebScraper CLI")
-    parser.add_argument("spider", choices=["dockerhub", "quay"], help="Choose the spider to run")
-    parser.add_argument("--query", default="", help="Search query for the registry")
+    parser.add_argument(
+        "spider",
+        choices=["dockerhub", "quay"],
+        help="Choose the spider to run",
+    )
+    parser.add_argument(
+        "--query", default="", help="Search query for the registry"
+    )
     args = parser.parse_args()
 
     process = CrawlerProcess()
 
     if args.spider == "dockerhub":
         spider = DockerhubDockerRegistrySpider
-        start_urls = [f"https://hub.docker.com/search?q={args.query}&page={i}" for i in range(1, 11)]
+        start_urls = [
+            f"https://hub.docker.com/search?q={args.query}&page={i}"
+            for i in range(1, 11)
+        ]
     elif args.spider == "quay":
         spider = QuayDockerRegistrySpider
         start_urls = [f"https://quay.io/search?q={args.query}"]
