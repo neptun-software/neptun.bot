@@ -47,28 +47,42 @@ def parse_update_string(update_string):
         past_date = current_date - relativedelta(years=value)
 
     formatted_date = past_date.strftime('%Y-%m-%d')
-    print(f"Calculated past date: {formatted_date}")  # Debugging statement
+    print(f"Calculated past date: {formatted_date}")
     return formatted_date
 
 class DockerhubDockerRegistrySpider(scrapy.Spider):
     name = "dockerhubDockerRegistrySpider"
     custom_settings = SCRAPY_SETTINGS
 
-    def start_requests(self):
-        for url in self.start_urls:
-            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        self.output_dir = f'./neptun_webscraper/spiders/logs/{self.timestamp}'
+        os.makedirs(self.output_dir, exist_ok=True)
+        self.items = {}
 
+    def start_requests(self):
+        for index, url in enumerate(self.start_urls, start=1):
+            print("---")
+            print("Starting request: " + url)
+            print("---")
             yield scrapy.Request(url, meta=dict(
+                page_number=index,
                 playwright=True,
                 playwright_include_page=True,
                 playwright_page_methods=[
                     PageMethod("wait_for_selector", "div#searchResults"),
-                    PageMethod("click", selector="button#onetrust-reject-all-handler", ),
-                    PageMethod("screenshot", path=f"./neptun_webscraper/spiders/logs/screenshots/{timestamp}.png", full_page=True)
+                    # PageMethod("click", selector="button#onetrust-reject-all-handler", ), # timeouts, if more than one page to crawl
+                    PageMethod("screenshot", path=f"{self.output_dir}/screenshot_page_{index}.png", full_page=True)
                 ]
             ))
 
     def parse(self, response):
+        page_number = response.meta.get('page_number')
+        if page_number is None:
+            self.logger.warning('Page number not found in meta: %s', response.url)
+            return
+    
         responseHTML = response.text
         selector = Selector(text=responseHTML)
         search_result = selector.css('#searchResults')
@@ -76,38 +90,26 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
         print("#search_results", search_result)
         print("---")
 
+        items = []
+
         if search_result:
             search_result_items = search_result.xpath('//a[@data-testid="imageSearchResult"]')
 
             for result in search_result_items:
-                # print("current result html: ", result.extract())
                 item = self.parse_result(result)
-                
-                timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-                filename = f'./neptun_webscraper/spiders/logs/{timestamp}.json'
-                
-                with open(filename, 'a+') as file:
-                    # Move to the end of file
-                    file.seek(0, os.SEEK_END)
-
-                    # If file is not empty, add a comma
-                    if file.tell() > 0:
-                        file.seek(file.tell() - 1, os.SEEK_SET)
-                        file.truncate()
-                        file.write(',\n')
-                    else:
-                        file.write('[\n')
-                    
-                    json.dump(item, file, indent=4)
-                    file.write('\n]')
-                
-                print(f"Item has been written to {filename}")
-
-                yield item
+                items.append(item)
         else:
             print("---")
             print("No search results found...")
             print("---")
+
+        if items:
+            self.items[page_number] = items
+
+            yield {
+                'page_number': page_number,
+                'items': items
+            }
 
     def parse_result(self, result):
         # extracts name, description, uploader, chips, downloads, stars, last update, pulls last week
@@ -157,6 +159,14 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
         item['stars'] = stars_elem.strip() if stars_elem else None
 
         return item
+    
+    # https://docs.scrapy.org/en/latest/topics/feed-exports.html?highlight=close#close
+    def close(self, reason):
+        for page_number, items in self.items.items():
+            filename = f'{self.output_dir}/data_page_{page_number}.json'
+            with open(filename, 'w') as f:
+                json.dump(items, f, indent=2)
+            self.logger.info(f'Items from page {page_number} have been written to {filename}')
 
 """
 SEARCH RESULT FORMAT (30.6.2024):

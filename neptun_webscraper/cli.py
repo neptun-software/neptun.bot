@@ -51,10 +51,10 @@ def main():  # pragma: no cover
 
     if args.spider == "dockerhub":
         spider = DockerhubDockerRegistrySpider
-        start_url = f"https://hub.docker.com/search?q={args.query}"
+        start_urls = [f"https://hub.docker.com/search?q={args.query}&page={i}" for i in range(1, 11)]
     elif args.spider == "quay":
         spider = QuayDockerRegistrySpider
-        start_url = f"https://quay.io/search?q={args.query}"
+        start_urls = [f"https://quay.io/search?q={args.query}"]
 
-    process.crawl(spider, start_urls=[start_url])
+    process.crawl(spider, start_urls=start_urls)
     process.start()
