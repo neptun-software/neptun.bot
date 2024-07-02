@@ -6,3 +6,5 @@
 
 Scrapy==2.11.1
 scrapy-playwright==v0.0.36
+python-dateutil
+types-python-dateutil

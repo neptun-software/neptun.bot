@@ -1,6 +1,15 @@
 
 # Python Project Template
 
+```
+make virtualenv
+source .venv/bin/activ
+```
+
+```
+make fmt
+```
+
 A low dependency and really simple to start project template for Python Projects.
 
 See also 
