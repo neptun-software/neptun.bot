@@ -12,6 +12,22 @@ This instructions are for linux base systems. (Linux, MacOS, BSD, etc.)
 - Enter the directory `cd tech-stack-ai-configuration-data-scraper`
 - Add upstream repo `git remote add upstream https://github.com/jonasfroeller/tech-stack-ai-configuration-data-scraper`
 
+## Installing Dependencies besides Python
+
+> Needed for JS support, if websites load content after page load client side.
+
+### Install Playwright
+
+```bash
+npm i playwright@1.44.1 --global
+```
+
+### Install the browser binaries
+
+```bash
+playwright install
+```
+
 ## Setting up your own virtual environment
 
 Run `make virtualenv` to create a virtual environment.

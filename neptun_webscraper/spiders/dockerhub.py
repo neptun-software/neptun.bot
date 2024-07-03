@@ -8,10 +8,6 @@ from dateutil.relativedelta import relativedelta
 from scrapy.selector import Selector
 from scrapy_playwright.page import PageMethod
 
-# playwright Settings
-# needed for JS support, if websites load content dynamically lazy
-# npm i playwright@1.44.1 --global, playwright install
-
 SCRAPY_SETTINGS = {
     "DOWNLOAD_HANDLERS": {
         "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
@@ -19,7 +15,7 @@ SCRAPY_SETTINGS = {
     },
     "REQUEST_FINGERPRINTER_IMPLEMENTATION": "2.7",
     "PLAYWRIGHT_BROWSER_TYPE": "chromium",
-    "USER_AGENT": None,  # using browser user agent instead
+    "USER_AGENT": None,  # None => using browsers user agent instead
 }
 
 
