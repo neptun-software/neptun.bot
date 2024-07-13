@@ -1,67 +1,35 @@
-# Neptun Webscraper
+# NEPTUN-SCRAPER
 
-[![codecov](https://codecov.io/gh/jonasfroeller/tech-stack-ai-configuration-data-scraper/branch/main/graph/badge.svg?token=tech-stack-ai-configuration-data-scraper_token_here)](https://codecov.io/gh/jonasfroeller/tech-stack-ai-configuration-data-scraper)
-[![CI](https://github.com/jonasfroeller/tech-stack-ai-configuration-data-scraper/actions/workflows/main.yml/badge.svg)](https://github.com/jonasfroeller/tech-stack-ai-configuration-data-scraper/actions/workflows/main.yml)
+## RUN 
 
-## Install it from PyPI
+* Install dependencies
 
-```bash
-pip install neptun_webscraper
+```shell
+poetry install
 ```
 
-## Usage
+* Run Neptun-Scraper
 
-```py
-from neptun_webscraper import BaseClass
-from neptun_webscraper import base_function
-
-BaseClass().base_method()
-base_function()
+```shell
+scrapy crawl dockerhubDockerRegistrySpider -a query="python"
 ```
 
-```bash
-python -m neptun_webscraper
+* Run Neptun-Bot (WebUI, Rest-Interface, Scrapy-Daemon)
+```shell
+docker compose up --build
 ```
 
-```bash
-neptun_webscraper
+* Access the WebUI:
+```shell
+http://localhost:8000
 ```
 
-## Docker Hub Scraper
-
-```bash
-python -m neptun_webscraper dockerhub --query=python
+* Access the DAEMON-Interface:
+```shell
+http://localhost:6802
 ```
 
-## Quay IO Scraper
-
-```bash
-python -m neptun_webscraper quay --query=python
+* Create a Scrapyd-Job
+```shell
+curl http://localhost:6802/schedule.json -d project=neptunscraper -d spider=dockerhubDockerRegistrySpider
 ```
-
-## Development
-
-## Create a virtualenv
-
-```bash
-make virtualenv
-source .venv/bin/activ
-```
-
-## Format the code
-
-```bash
-make fmt
-```
-
-## Lint the code
-
-```bash
-make lint
-```
-
-## Contributing
-
-More commands are in the [Makefile](Makefile).
-
-Read the [CONTRIBUTING.md](CONTRIBUTING.md) file.

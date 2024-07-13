@@ -1,7 +1,0 @@
-# `make init` => automatically based on the template
-# run `make switch-to-poetry` to use the poetry package manager
-
-Scrapy==2.11.1
-scrapy-playwright==v0.0.36
-python-dateutil
-types-python-dateutil

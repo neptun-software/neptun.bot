@@ -1,63 +1,22 @@
-import json
-import os
-import re
-from datetime import datetime, timedelta
-
 import scrapy
-from dateutil.relativedelta import relativedelta
 from scrapy.selector import Selector
 from scrapy_playwright.page import PageMethod
-
-SCRAPY_SETTINGS = {
-    "DOWNLOAD_HANDLERS": {
-        "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-        "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-    },
-    "REQUEST_FINGERPRINTER_IMPLEMENTATION": "2.7",
-    "PLAYWRIGHT_BROWSER_TYPE": "chromium",
-    "USER_AGENT": None,  # None => using browsers user agent instead
-}
-
-
-def parse_update_string(update_string):
-    print(f"Parsing update string: '{update_string}'")
-    match = re.search(
-        r"Updated (a|\d+) (day|week|month|year)s? ago", update_string
-    )
-    if not match:
-        print(f"String format not recognized: '{update_string}'")
-        raise ValueError("String format not recognized")
-
-    value_str, unit = match.group(1), match.group(2)
-    print(f"Extracted value: {value_str}, unit: {unit}")
-
-    # Handle the case where 'a' is used instead of a number
-    value = 1 if value_str == "a" else int(value_str)
-
-    current_date = datetime.now()
-
-    if unit == "day":
-        past_date = current_date - timedelta(days=value)
-    elif unit == "week":
-        past_date = current_date - timedelta(weeks=value)
-    elif unit == "month":
-        past_date = current_date - relativedelta(months=value)
-    elif unit == "year":
-        past_date = current_date - relativedelta(years=value)
-
-    formatted_date = past_date.strftime("%Y-%m-%d")
-    print(f"Calculated past date: {formatted_date}")
-    return formatted_date
+from datetime import datetime
+import os
+import json
 
 
 class DockerhubDockerRegistrySpider(scrapy.Spider):
     name = "dockerhubDockerRegistrySpider"
-    custom_settings = SCRAPY_SETTINGS
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, query=None, output_dir="output", *args, **kwargs):
+        super(DockerhubDockerRegistrySpider, self).__init__(*args, **kwargs)
         self.timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-        self.output_dir = f"./neptun_webscraper/spiders/logs/{self.timestamp}"
+        self.output_dir = output_dir
+        self.start_urls = [
+            f'https://hub.docker.com/search?q={query}&page={i}'
+            for i in range(1, 11)
+        ]
         os.makedirs(self.output_dir, exist_ok=True)
         self.items = {}
 
@@ -74,14 +33,9 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
                     playwright_include_page=True,
                     playwright_page_methods=[
                         PageMethod("wait_for_selector", "div#searchResults"),
-                        # timeouts, if more than one page to crawl
-                        # PageMethod(
-                        # "click",
-                        # selector="button#onetrust-reject-all-handler",
-                        # ),
                         PageMethod(
                             "screenshot",
-                            path=f"{self.output_dir}/screenshot_page_{index}.png",  # noqa: E501
+                            path=f"{self.output_dir}/screenshot_page_{index}.png",
                             full_page=True,
                         ),
                     ],
@@ -146,9 +100,9 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
         # Extract last update and description
         update_elem = result.css('span:contains("Updated")::text').get()
         if update_elem:
-            item["last_update"] = parse_update_string(update_elem.strip())
+            item["last_update"] = self.parse_update_string(update_elem.strip())
             desc_elem = result.xpath(
-                './/span[contains(text(), "Updated")]/ancestor::div[1]/following-sibling::p[1]/text()'  # noqa: E501
+                './/span[contains(text(), "Updated")]/ancestor::div[1]/following-sibling::p[1]/text()'
             ).get()
             item["description"] = desc_elem.strip() if desc_elem else None
         else:
@@ -179,11 +133,16 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
 
         # Extract stars
         stars_elem = result.xpath(
-            '//svg[@data-testid="StarOutlineIcon"]/following-sibling::span/strong/text()'  # noqa: E501
+            '//svg[@data-testid="StarOutlineIcon"]/following-sibling::span/strong/text()'
         ).get()
         item["stars"] = stars_elem.strip() if stars_elem else None
 
         return item
+
+    @staticmethod
+    def parse_update_string(update_string):
+        # Implement the logic to parse the update string into a desired format
+        return update_string
 
     # https://docs.scrapy.org/en/latest/topics/feed-exports.html?highlight=close#close
     def close(self, reason):
@@ -192,5 +151,5 @@ class DockerhubDockerRegistrySpider(scrapy.Spider):
             with open(filename, "w") as f:
                 json.dump(items, f, indent=2)
             self.logger.info(
-                f"Items from page {page_number} have been written to {filename}"  # noqa: E501
+                f"Items from page {page_number} have been written to {filename}"
             )

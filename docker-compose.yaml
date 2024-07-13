@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  scrapyd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scrapyd
+    volumes:
+      - .:/code
+    working_dir: /code
+    ports:
+      - "6802:6800"
+    restart: unless-stopped
+    networks:
+      scrapyd_network:
+        ipv4_address: 172.20.0.10
+
+  scrapydweb:
+    build:
+      context: ./scrapydweb
+    container_name: scrapydweb
+    ports:
+      - "8000:8000"
+    environment:
+      - SCRAPYD_ADMIN=admin
+      - SCRAPYD_PASSWD=secret
+      - SCRAPYD_SERVERS=scrapyd:6800
+      - DATABASE_URL=sqlite:///db.sqlite3
+    depends_on:
+      - scrapyd
+    networks:
+      scrapyd_network:
+        ipv4_address: 172.20.0.11
+    
+  scrapyrt:
+    container_name: scrapyrt
+    image: vimagick/scrapyd
+    command: scrapyrt -i 0.0.0.0 -p 9080
+    ports:
+      - "9080:9080"
+    volumes:
+      - .:/code
+    working_dir: /code
+    restart: unless-stopped
+    networks:
+      scrapyd_network:
+        ipv4_address: 172.20.0.12
+    depends_on:
+      - scrapyd  
+
+networks:
+  scrapyd_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
