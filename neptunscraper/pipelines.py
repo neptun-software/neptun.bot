@@ -4,7 +4,6 @@ import json
 from collections import defaultdict
 from neptunscraper import items
 
-
 class DockerPipeline:
 
     def open_spider(self, spider):
