@@ -42,21 +42,24 @@ ROTATING_PROXY_LIST = helpers.fetch_and_parse_proxies('https://raw.githubusercon
 
 
 DOWNLOADER_MIDDLEWARES = {
-    #'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
-    #'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+    'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
     #'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
    # 'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
    # 'neptunscraper.middlewares.TooManyRequestsRetryMiddleware': 543,
 }
 
 AUTOTHROTTLE_ENABLED = True
-AUTOTHROTTLE_START_DELAY = 2
-AUTOTHROTTLE_MAX_DELAY = 1
+AUTOTHROTTLE_START_DELAY = 5
+AUTOTHROTTLE_MAX_DELAY = 60
+AUTOTHROTTLE_TARGET_CONCURRENCY = 0.5
 AUTOTHROTTLE_DEBUG = True
-AUTOTHROTTLE_TARGET_CONCURRENCY = 1
-DOWNLOAD_DELAY = 1
+
+DOWNLOAD_DELAY = 5
+CONCURRENT_REQUESTS = 1
+CONCURRENT_REQUESTS_PER_DOMAIN = 1
+CONCURRENT_REQUESTS_PER_IP = 1
 
 LOG_LEVEL = 'DEBUG'
 

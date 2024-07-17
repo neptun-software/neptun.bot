@@ -20,3 +20,11 @@ class DockerImageItem(scrapy.Item):
     tags = scrapy.Field()
 
 
+class DockerBlogPostItem(scrapy.Item):
+    title = scrapy.Field()
+    authors = scrapy.Field()
+    post_tags = scrapy.Field()
+    categories = scrapy.Field()
+    posted_on = scrapy.Field()
+    blog_content = scrapy.Field()
+
