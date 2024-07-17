@@ -6,6 +6,8 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from . import helpers
+import random
 
 BOT_NAME = "neptunscraper"
 
@@ -17,7 +19,7 @@ NEWSPIDER_MODULE = "neptunscraper.spiders"
 #USER_AGENT = "neptunscraper (+http://www.yourdomain.com)"
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 DOWNLOAD_HANDLERS = {
     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
@@ -28,8 +30,53 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 PLAYWRIGHT_BROWSER_TYPE = "chromium"
 USER_AGENT = None
 
-# Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+
+ITEM_PIPELINES = {
+    # 'neptunscraper.pipelines.DockerPipeline': 300,
+}
+
+# REDIRECT_ENABLED = True
+# RETRY_HTTP_CODES = [429]
+
+ROTATING_PROXY_LIST = helpers.fetch_and_parse_proxies('https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt')
+
+
+DOWNLOADER_MIDDLEWARES = {
+    #'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+    #'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+    #'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+    #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+   # 'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+   # 'neptunscraper.middlewares.TooManyRequestsRetryMiddleware': 543,
+}
+
+AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_START_DELAY = 2
+AUTOTHROTTLE_MAX_DELAY = 1
+AUTOTHROTTLE_DEBUG = True
+AUTOTHROTTLE_TARGET_CONCURRENCY = 1
+DOWNLOAD_DELAY = 1
+
+LOG_LEVEL = 'DEBUG'
+
+PLAYWRIGHT_ABORT_REQUEST = helpers.should_abort_request
+
+# PLAYWRIGHT_DEFAULT_NAVIGATION_TIMEOUT = 1 * 1000
+'''
+PLAYWRIGHT_CONTEXTS = {
+    "default": {
+        "proxy": {
+            "server": random.choice(helpers.fetch_and_parse_proxies('https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt')),
+        },
+    },
+    "alternative": {
+        "proxy": {
+            "server": random.choice(helpers.fetch_and_parse_proxies('https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt')),
+        },
+    }
+}
+'''
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay

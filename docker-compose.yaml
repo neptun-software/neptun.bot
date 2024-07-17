@@ -32,7 +32,7 @@ services:
     networks:
       scrapyd_network:
         ipv4_address: 172.20.0.11
-    
+
   scrapyrt:
     container_name: scrapyrt
     image: vimagick/scrapyd
@@ -47,7 +47,7 @@ services:
       scrapyd_network:
         ipv4_address: 172.20.0.12
     depends_on:
-      - scrapyd  
+      - scrapyd
 
 networks:
   scrapyd_network:

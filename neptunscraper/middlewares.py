@@ -4,9 +4,34 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-
+from scrapy.downloadermiddlewares.retry import RetryMiddleware
+from scrapy.utils.response import response_status_message
+from scrapy.exceptions import IgnoreRequest
+import time
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+
+
+class RefererMiddleware:
+    def __init__(self, blocked_urls):
+        self.blocked_urls = blocked_urls
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        # Initialize the middleware with the blocked URLs list
+        blocked_urls = crawler.settings.getlist('BLOCKED_REFERER_URLS', [])
+        return cls(blocked_urls)
+
+    def process_request(self, request, spider):
+        # Check if the request has a referrer header
+        referrer = request.headers.get('Referer')
+        if referrer:
+            for url_pattern in self.blocked_urls:
+                if url_pattern in referrer.decode('utf-8'):
+                    # Cancel the request if the referrer matches a blocked URL pattern
+                    raise IgnoreRequest(f"Request blocked due to referrer from {referrer}")
+
+        return None
 
 
 class NeptunscraperSpiderMiddleware:
@@ -101,3 +126,28 @@ class NeptunscraperDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
+
+
+class TooManyRequestsRetryMiddleware(RetryMiddleware):
+
+    def __init__(self, crawler):
+        super(TooManyRequestsRetryMiddleware, self).__init__(crawler.settings)
+        self.crawler = crawler
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(crawler)
+
+    def process_response(self, request, response, spider):
+        if request.meta.get('dont_retry', False):
+            return response
+        elif response.status == 429:
+            self.crawler.engine.pause()
+            time.sleep(60)  # If the rate limit is renewed in a minute, put 60 seconds, and so on.
+            self.crawler.engine.unpause()
+            reason = response_status_message(response.status)
+            return self._retry(request, reason, spider) or response
+        elif response.status in self.retry_http_codes:
+            reason = response_status_message(response.status)
+            return self._retry(request, reason, spider) or response
+        return response

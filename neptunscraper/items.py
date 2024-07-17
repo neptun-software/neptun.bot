@@ -6,25 +6,17 @@
 import scrapy
 
 
-class DockerhubItem(scrapy.Item):
-    name: scrapy.Field
-    is_official_image: scrapy.Field
-    is_verified_publisher: scrapy.Field
-    last_update: scrapy.Field
-    description: scrapy.Field
-    chips: scrapy.Field
-    downloads: scrapy.Field
-    pulls_last_week: scrapy.Field
-    stars: scrapy.Field
+class DockerImageItem(scrapy.Item):
+    name = scrapy.Field()
+    uploader = scrapy.Field()
+    is_official_image = scrapy.Field()
+    is_verified_publisher = scrapy.Field()
+    last_update = scrapy.Field()
+    description = scrapy.Field()
+    chips = scrapy.Field()
+    downloads = scrapy.Field()
+    pulls_last_week = scrapy.Field()
+    stars = scrapy.Field()
+    tags = scrapy.Field()
 
 
-class QuayIoItem(scrapy.Item):
-    name: scrapy.Field
-    is_official_image: scrapy.Field
-    is_verified_publisher: scrapy.Field
-    last_update: scrapy.Field
-    description: scrapy.Field
-    chips: scrapy.Field
-    downloads: scrapy.Field
-    pulls_last_week: scrapy.Field
-    stars: scrapy.Field

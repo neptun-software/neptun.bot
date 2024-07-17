@@ -4,14 +4,11 @@ WORKDIR /code
 
 COPY . .
 
-RUN pip install logparser
-
-RUN logparser &
 
 RUN pip install scrapy-playwright && \
     playwright install && \
     playwright install-deps
 
-EXPOSE 6800
+EXPOSE 9080
 
-CMD ["scrapyd"]
+CMD ["scrapyrt -i 0.0.0.0 -p 9080"]
