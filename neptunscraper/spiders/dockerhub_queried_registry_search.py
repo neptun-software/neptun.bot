@@ -4,8 +4,6 @@ from scrapy_playwright.page import PageMethod
 from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
 from neptunscraper.items import DockerImageItem
-from scrapy.crawler import CrawlerRunner
-from scrapy.utils.project import get_project_settings
 
 
 class DockerhubDockerRegistrySpider(CrawlSpider):
@@ -76,6 +74,8 @@ class DockerhubDockerRegistrySpider(CrawlSpider):
 
     def close(self, reason):
         self.logger.info(f"Closed or finished...{reason}")
+
+
 
 if __name__ == "__main__":
     query = "python"  # Replace with your query
