@@ -26,5 +26,11 @@ class DockerBlogPostItem(scrapy.Item):
     post_tags = scrapy.Field()
     categories = scrapy.Field()
     posted_on = scrapy.Field()
-    blog_content = scrapy.Field()
+    sections = scrapy.Field()
+
+
+class DockerBlogPostSectionItem(scrapy.Item):
+    title = scrapy.Field()
+    content = scrapy.Field()
+    code = scrapy.Field()
 

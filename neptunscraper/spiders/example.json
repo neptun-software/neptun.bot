@@ -1,0 +1,48 @@
+ {
+    title: "ReadMeAI: An AI-powered README Generator for Developers",
+    content: `This post was written in collaboration with Docker AI/ML Hackathon participants Gitanshu Sankhla and Vijay Barma.
+    In this AI/ML Hackathon post, we’ll share another interesting winning project from last year’s Docker AI/ML Hackathon.
+    This time, we will dive into ReadMeAI, one of the honorable mention winners.
+    For many developers, planning and writing code is the most enjoyable part of the process.
+    It’s where creativity meets logic, and lines of code transform into solutions.
+    Although some developers find writing documentation equally fulfilling, crafting clear and concise code instructions isn’t for everyone.
+    Imagine you’re a developer working on a complex project with a team.
+    You just pushed your final commit with a sign of relief, but the clock is ticking on your deadline.
+    You know that clear documentation is crucial.
+    Your teammates need to understand your code’s intricacies for smooth integration, but writing all that documentation feels like another project entirely,
+    stealing your precious time from bug fixes and testing. That’s where ReadMeAI, an AI-powered README generator fits in.`,
+    sections: [
+        {
+            title: "What makes ReadMeAI unique?",
+            content: `The following demo, which was submitted to the AI/ML Hackathon, provides an overview of ReadMeAI (Figure 1).
+            Figure 1: Demo of the ReadMeAI as submitted to the AI/ML Hackathon.
+            ...` // usw (man könnte noch solche dinge herausfiltern, die videos oder bilder beschreiben...)
+        },
+        // ...
+        {
+            title: "AI integration and markdown generation",
+            content: `
+            The AI integration is handled by the \controllers/app.js\ file (as shown below), specifically in the postApp function.
+            The uploaded code and user description are passed to the AI integration, which uses the Google Palm API to generate a Markdown README.
+
+            ...
+
+            \\\`
+            const fs = require('fs');
+            const path = require('path');
+            const showdown = require('showdown');
+            const multer = require('multer');
+            const zip = require('express-zip');
+            const palmApi = require('../api/fetchPalm');
+            // showdown converter
+            const converter = new showdown.Converter();
+            converter.setFlavor('github');
+            // getting template
+            let template;
+            fs.readFile('./data/template.txt', 'utf8', (err, data) => {
+            ...
+            \\\`
+            ` // usw.
+        }
+    ]
+}
