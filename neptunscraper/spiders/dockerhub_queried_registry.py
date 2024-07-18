@@ -4,10 +4,10 @@ from scrapy_playwright.page import PageMethod
 from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
 from neptunscraper.items import DockerImageItem
-
+import re
 
 class DockerhubQueriedRegistrySpider(CrawlSpider):
-    name = "dockerhubDockerQueriedRegistrySpider"
+    name = "dockerhubQueriedRegistrySpider"
     allowed_domains = ["hub.docker.com"]
 
     rules = (
@@ -47,26 +47,34 @@ class DockerhubQueriedRegistrySpider(CrawlSpider):
     def parse_registry(self, response):
         item = DockerImageItem()
 
-        name = response.css('h1.MuiTypography-h2::text').get()
+        # Name of the repository (check both <h1> and <h2>)
+        name = response.css('h1.MuiTypography-h2::text, h2.MuiTypography-h2::text').get()
         item['name'] = name.strip() if name else None
 
-        # determine if the publisher is verified
-        official_icon = response.css('svg[data-testid="official-icon"]')
-        verified_publisher_icon = response.css('svg[data-testid="verified_publisher-icon"]')
-
-        item["is_official_image"] = bool(official_icon)
+        # Determine if the publisher is verified
+        verified_publisher_icon = response.css('svg[data-testid="official-icon"]')
         item["is_verified_publisher"] = bool(verified_publisher_icon)
 
+        # Extract downloads
+        downloads_elem = response.css('svg[data-testid="DownloadIcon"] + p.MuiTypography-body1::text').get()
+        item['downloads'] = self.parse_downloads(downloads_elem) if downloads_elem else response.css(
+            'p.MuiTypography-body1:nth-child(3)::text').get()
+
         description = response.css('p[data-testid="description"]::text').get()
-        item['description'] = description.strip() if description else None
 
-        item['chips'] = response.css('a[data-testid="productChip"] span::text').getall()
+        if not description:
+            description = response.css('p.MuiTypography-body1:nth-child(3)::text').get()
+            if str(item['downloads']) in str(description):
+                description = None
+        item['description'] = description
 
-        downloads_elem = response.css('p.MuiTypography-body1.css-12r72vy::text').get()
-        item['downloads'] = self.parse_downloads(downloads_elem) if downloads_elem else None
+        # Chips (Tags)
+        item['chips'] = [chip.strip() for chip in response.css('span.MuiChip-labelSmall::text').getall() if
+                         chip.strip().lower() not in ["new", "image"]]
 
-        stars = response.css('svg[data-testid="StarOutlineIcon"] + span > strong::text').get()
-        item['stars'] = stars.strip() if stars else None
+        stars_text = response.css('svg[data-testid="StarOutlineIcon"] + span.MuiTypography-body1 strong::text').get()
+        item['stars'] = stars_text.strip() if stars_text else None
+
         tags = {}
 
         tag_items = response.css('div[data-testid="repotagsTagListItem"]')
@@ -98,6 +106,25 @@ class DockerhubQueriedRegistrySpider(CrawlSpider):
 
         return None
 
+    def parse_downloads(self, downloads_elem):
+        if not downloads_elem:
+            return None
+
+        # Remove non-numeric characters
+        downloads_elem = re.sub(r'\D', '', downloads_elem)
+
+        # Check if the resulting string has a length > 0
+        if len(downloads_elem) == 0:
+            return None
+
+        # Convert the remaining string to an integer
+        try:
+            downloads = int(downloads_elem)
+        except ValueError:
+            return None
+
+        return downloads
+
     @staticmethod
     def parse_update_string(update_string):
         return update_string.strip() if update_string else None
@@ -109,15 +136,3 @@ class DockerhubQueriedRegistrySpider(CrawlSpider):
         return None
 
 
-if __name__ == "__main__":
-    query = "python"  # Replace with your query
-    output_dir = "output"
-    process = CrawlerProcess(settings={
-        'FEED_FORMAT': 'json',
-        'FEED_URI': f'{output_dir}/output.json',
-        'LOG_LEVEL': 'INFO',
-        'PLAYWRIGHT_INCLUDE_PATH': True,  # Ensure Playwright is included in the path
-        'PLAYWRIGHT_BROWSER': 'chromium',  # Specify the browser to use (chromium or firefox)
-    })
-    process.crawl(DockerhubQueriedRegistrySpider, query=query)
-    process.start()

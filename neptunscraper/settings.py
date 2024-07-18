@@ -31,6 +31,11 @@ PLAYWRIGHT_BROWSER_TYPE = "chromium"
 USER_AGENT = None
 
 
+PLAYWRIGHT_LAUNCH_OPTIONS = {
+    'headless': True,
+    'args': ['--no-sandbox', '--disable-setuid-sandbox']
+}
+
 ITEM_PIPELINES = {
     # 'neptunscraper.pipelines.DockerPipeline': 300,
 }
@@ -45,20 +50,20 @@ DOWNLOADER_MIDDLEWARES = {
     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-   # 'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-   # 'neptunscraper.middlewares.TooManyRequestsRetryMiddleware': 543,
+    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+    'neptunscraper.middlewares.TooManyRequestsRetryMiddleware': 543,
 }
 
-#AUTOTHROTTLE_ENABLED = True
-#AUTOTHROTTLE_START_DELAY = 5
-#AUTOTHROTTLE_MAX_DELAY = 60
-#AUTOTHROTTLE_TARGET_CONCURRENCY = 0.5
-#AUTOTHROTTLE_DEBUG = True
+AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_START_DELAY = 5
+AUTOTHROTTLE_MAX_DELAY = 60
+AUTOTHROTTLE_TARGET_CONCURRENCY = 0.5
+AUTOTHROTTLE_DEBUG = True
 
-#DOWNLOAD_DELAY = 5
-#CONCURRENT_REQUESTS = 1
-#CONCURRENT_REQUESTS_PER_DOMAIN = 1
-#CONCURRENT_REQUESTS_PER_IP = 1
+DOWNLOAD_DELAY = 5
+CONCURRENT_REQUESTS = 1
+CONCURRENT_REQUESTS_PER_DOMAIN = 1
+CONCURRENT_REQUESTS_PER_IP = 1
 
 LOG_LEVEL = 'DEBUG'
 

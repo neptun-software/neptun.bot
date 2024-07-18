@@ -8,6 +8,10 @@ from neptunscraper.items import DockerBlogPostItem, DockerBlogPostSectionItem
 
 def set_playwright_true(request, response):
     request.meta["playwright"] = True
+    request.meta["playwright_page_methods"] = {
+        "wait_for_search_results": PageMethod("wait_for_selector", "div#searchResults"),
+        "set_extra_http_headers": PageMethod("set_extra_http_headers", {"DNT": "1"}),
+    }
     return request
 
 
