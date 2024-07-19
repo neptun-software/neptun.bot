@@ -47,11 +47,11 @@ ROTATING_PROXY_LIST = helpers.fetch_and_parse_proxies('https://raw.githubusercon
 
 
 DOWNLOADER_MIDDLEWARES = {
-    'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
-    'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
-    'neptunscraper.middlewares.TooManyRequestsRetryMiddleware': 543,
+  #  'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+  #  'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+  #  'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+  #  'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
+  #  'neptunscraper.middlewares.TooManyRequestsRetryMiddleware': 543,
 }
 
 AUTOTHROTTLE_ENABLED = True

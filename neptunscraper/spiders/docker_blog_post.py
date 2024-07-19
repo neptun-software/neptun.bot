@@ -1,11 +1,7 @@
-import re
-
 import scrapy
 from scrapy.spiders import Rule, CrawlSpider
-from scrapy_playwright.page import PageMethod
 from scrapy.linkextractors import LinkExtractor
 from neptunscraper.items import DockerBlogPostItem, DockerBlogPostSectionItem,DockerBlogPostCodeItem
-import html2text
 
 
 def set_playwright_true(request, response):
@@ -13,8 +9,8 @@ def set_playwright_true(request, response):
     return request
 
 
-class DockerHubBlogSpider(CrawlSpider):
-    name = 'dockerhubBlogPostSpider'
+class DockerBlogSpider(CrawlSpider):
+    name = 'dockerBlogPostSpider'
     allowed_domains = ['www.docker.com']
     start_urls = ['https://www.docker.com/blog']
 
