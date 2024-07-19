@@ -77,10 +77,14 @@ class DockerHubBlogSpider(CrawlSpider):
                 text_content = element.css('::text').getall()
                 current_section_content.append(' '.join(text_content).strip())
             elif element.root.tag == 'div' and 'wp-block-syntaxhighlighter-code' in element.attrib.get('class', ''):
-                code_html = element.css('td.code').getall()
-
+                code_html = element.css('td.code').get()
                 current_section_code.append(DockerBlogPostCodeItem(
                     content=code_html,
+                ))
+            elif element.root.tag == 'pre':
+                code_html = element.css('pre').get()
+                current_section_code.append(DockerBlogPostCodeItem(
+                    content=code_html
                 ))
 
         if current_section_title is not None:
