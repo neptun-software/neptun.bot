@@ -62,19 +62,6 @@ class DockerhubDockerRegistrySearchSpider(spider.Spider):
             next_button_exists = response.xpath('//li[@data-testid="pagination-next"]')
 
             if next_button_exists:
-
-                return response.follow(
-                    url=f"https://hub.docker.com/search?q=python&page={next_page}",
-                    meta=dict(
-                        playwright=True,
-                        playwright_page_methods={
-                            "wait_for_search_results": PageMethod("wait_for_selector", "div#searchResults"),
-                        },
-                        current_page=next_page,
-                    ),
-                    callback=self.parse,
-                )
-                '''
                 yield scrapy.Request(
                     url=f"https://hub.docker.com/search?q=python&page={next_page}",
                     meta=dict(
@@ -86,26 +73,29 @@ class DockerhubDockerRegistrySearchSpider(spider.Spider):
                     ),
                     callback=self.parse,
                 )
-                '''
-
             else:
                 self.logger.info("No more pages to scrape.")
 
     def parse_registry(self, response):
         item = DockerImageItem()
 
-        # Name of the repository (check both <h1> and <h2>)
         name = response.css('h1.MuiTypography-h2::text, h2.MuiTypography-h2::text').get()
         item['name'] = name.strip() if name else None
 
-        # Determine if the publisher is verified
         verified_publisher_icon = response.css('svg[data-testid="official-icon"]')
         item["is_verified_publisher"] = bool(verified_publisher_icon)
 
         # Extract downloads
         downloads_elem = response.css('svg[data-testid="DownloadIcon"] + p.MuiTypography-body1::text').get()
-        item['downloads'] = self.parse_downloads(downloads_elem) if downloads_elem else response.css(
+        item['downloads'] = downloads_elem if downloads_elem else response.css(
             'p.MuiTypography-body1:nth-child(3)::text').get()
+
+        if len(str(item['downloads'])) > 4:
+            item['downloads'] = None if downloads_elem else response.css(
+                'p.MuiTypography-body1:nth-child(4)::text').get()
+
+            if item['downloads'] is None:
+                item['downloads'] = response.css('p.MuiTypography-body1:nth-child(5)::text').get()
 
         description = response.css('p[data-testid="description"]::text').get()
 
@@ -152,28 +142,6 @@ class DockerhubDockerRegistrySearchSpider(spider.Spider):
                 return parts[0], parts[1]
 
         return None
-
-    def parse_downloads(self, downloads_elem):
-        if not downloads_elem:
-            return None
-
-        # Remove non-numeric characters
-        downloads_elem = re.sub(r'\D', '', downloads_elem)
-
-        # Check if the resulting string has a length > 0
-        if len(downloads_elem) == 0:
-            return None
-
-        # Convert the remaining string to an integer
-        try:
-            downloads = int(downloads_elem)
-        except ValueError:
-            return None
-
-        return downloads
-
-
-
 
     def close(spider, reason):
         spider.logger.info(f"Spider closed: {spider.name}, due to {reason}")
