@@ -35,3 +35,7 @@ class DockerBlogPostSectionItem(scrapy.Item):
     content = scrapy.Field()
     code = scrapy.Field()
 
+
+class DockerBlogPostCodeItem(scrapy.Item):
+    content = scrapy.Field()
+    type = scrapy.Field()

@@ -6,6 +6,7 @@ from scrapy.linkextractors import LinkExtractor
 from neptunscraper.items import DockerImageItem
 import re
 
+
 class DockerhubQueriedRegistrySpider(CrawlSpider):
     name = "dockerhubQueriedRegistrySpider"
     allowed_domains = ["hub.docker.com"]

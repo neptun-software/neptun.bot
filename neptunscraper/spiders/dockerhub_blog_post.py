@@ -1,8 +1,11 @@
+import re
+
 import scrapy
 from scrapy.spiders import Rule, CrawlSpider
 from scrapy_playwright.page import PageMethod
 from scrapy.linkextractors import LinkExtractor
-from neptunscraper.items import DockerBlogPostItem
+from neptunscraper.items import DockerBlogPostItem, DockerBlogPostSectionItem,DockerBlogPostCodeItem
+import html2text
 
 
 def set_playwright_true(request, response):
@@ -53,5 +56,42 @@ class DockerHubBlogSpider(CrawlSpider):
 
         item["content"] = '\n'.join(paragraphs)
 
-        yield item
+        sections = []
+        current_section_title = None
+        current_section_content = []
+        current_section_code = []
 
+        for element in response.css('div.et_pb_module.et_pb_post_content *'):
+            if element.root.tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+                if current_section_title is not None:
+                    sections.append(DockerBlogPostSectionItem(
+                        title=current_section_title,
+                        content='\n'.join(current_section_content).strip(),
+                        code=current_section_code
+                    ))
+
+                current_section_title = element.css('::text').get().strip()
+                current_section_content = []
+                current_section_code = []
+            elif element.root.tag == 'p':
+                text_content = element.css('::text').getall()
+                current_section_content.append(' '.join(text_content).strip())
+            elif element.root.tag == 'div' and 'wp-block-syntaxhighlighter-code' in element.attrib.get('class', ''):
+                code_html = element.css('td.code').getall()
+
+                current_section_code.append(DockerBlogPostCodeItem(
+                    content=code_html,
+                ))
+
+        if current_section_title is not None:
+            sections.append(DockerBlogPostSectionItem(
+                title=current_section_title,
+                content='\n'.join(current_section_content).strip(),
+                # the code is provided as html: https://www.atatus.com/tools/html-to-text (convert before further usage)
+                # https://www.freeformatter.com/json-escape.html#before-output
+                code=current_section_code
+            ))
+
+        item['sections'] = sections
+
+        yield item
