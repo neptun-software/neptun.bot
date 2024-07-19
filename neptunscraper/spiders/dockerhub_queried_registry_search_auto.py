@@ -1,14 +1,7 @@
 import scrapy
-from scrapy.spiders import Rule, CrawlSpider
-from scrapy.linkextractors import LinkExtractor
 from scrapy.utils import spider
 from scrapy_playwright.page import PageMethod
 from neptunscraper.items import DockerImageItem
-import re
-
-def set_playwright_true(request, response):
-    request.meta["playwright"] = True
-    return request
 
 
 class DockerhubDockerRegistrySearchSpider(spider.Spider):
