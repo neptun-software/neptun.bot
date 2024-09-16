@@ -14,6 +14,12 @@ class DockerBlogSpider(CrawlSpider):
     allowed_domains = ['www.docker.com']
     start_urls = ['https://www.docker.com/blog']
 
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'neptunscraper.pipelines.SaveBlogPostToPostgresPipeline': 300,
+        }
+    }
+
     rules = (
         Rule(LinkExtractor(restrict_xpaths='//div[@class="wp-pagenavi"]//a[@class="nextpostslink"]'),
              follow=True,

@@ -38,6 +38,7 @@ PLAYWRIGHT_LAUNCH_OPTIONS = {
 
 ITEM_PIPELINES = {
     # 'neptunscraper.pipelines.DockerPipeline': 300,
+    'neptunscraper.pipelines.SaveRegistryToPostgresPipeline': 300,
 }
 
 # REDIRECT_ENABLED = True

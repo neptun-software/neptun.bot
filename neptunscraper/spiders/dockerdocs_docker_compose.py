@@ -15,6 +15,7 @@ class DockerDocsComposeSpider(CrawlSpider):
     allowed_domains = ['docs.docker.com']
     start_urls = ['https://docs.docker.com/compose']
 
+
     rules = (
         Rule(
             LinkExtractor(restrict_xpaths=(

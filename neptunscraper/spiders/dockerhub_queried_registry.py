@@ -11,6 +11,12 @@ class DockerhubQueriedRegistrySpider(CrawlSpider):
     name = "dockerhubQueriedRegistrySpider"
     allowed_domains = ["hub.docker.com"]
 
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'neptunscraper.pipelines.SaveRegistryToPostgresPipeline': 300,
+        }
+    }
+
     rules = (
         Rule(
             LinkExtractor(allow='/_/'),

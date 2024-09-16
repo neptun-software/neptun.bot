@@ -7,6 +7,11 @@ from neptunscraper.items import DockerImageItem
 class DockerhubDockerRegistrySearchSpider(spider.Spider):
     name = "dockerhubDockerQueriedRegistrySearchSpider"
     allowed_domains = ["hub.docker.com"]
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'neptunscraper.pipelines.SaveRegistryToPostgresPipeline': 300,
+        }
+    }
 
     def __init__(self, query=None, depth=None, *args, **kwargs):
         super(DockerhubDockerRegistrySearchSpider, self).__init__(*args, **kwargs)

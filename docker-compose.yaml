@@ -48,7 +48,18 @@ services:
         ipv4_address: 172.20.0.12
     depends_on:
       - scrapyd
-
+  postgres:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
 networks:
   scrapyd_network:
     driver: bridge
