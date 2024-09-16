@@ -47,8 +47,10 @@ class DockerDocsComposeItem(scrapy.Item):
 class DockerDocsComposeSectionItem(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
-    code = scrapy.Field()
+    url = scrapy.Field()
 
 
 class DockerDocsComposeCodeItem(scrapy.Item):
-    content = scrapy.Field()
+    language = scrapy.Field()
+    code = scrapy.Field()
+    url = scrapy.Field()
