@@ -17,7 +17,7 @@ class DockerhubDockerRegistrySearchSpider(spider.Spider):
         super(DockerhubDockerRegistrySearchSpider, self).__init__(*args, **kwargs)
         self.query = query
         self.depth = depth
-        self.start_urls = [f'https://hub.docker.com/search?q={query}&page=1']
+        self.start_urls = [f'https://hub.docker.com/search']
 
     def start_requests(self):
         for url in self.start_urls:
